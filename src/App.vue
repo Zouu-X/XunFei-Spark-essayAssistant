@@ -1,9 +1,15 @@
 <template>
-  <div>TEST</div>
+  <div>
+    <main-page />
+  </div>
 </template>
 
 <script>
+import mainPage from "@/views/mainPage/index.vue";
 export default {
+  components: {
+    mainPage,
+  },
   data() {
     return {}
   }
