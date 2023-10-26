@@ -13,7 +13,7 @@
       type="text"
       placeholder="请输入内容"
       v-model="textInput"
-      @change="Submit"
+      @keyup.enter.native="Submit"
       >
         <el-button slot="append" icon="el-icon-thumb" @click="Submit" />
       </el-input>
@@ -30,7 +30,7 @@
       <el-radio-group
           v-model="radio"
           @input="inputListener"
-          style="margin-top: 20px;"
+          style="margin-top: 30px;"
       >
         <el-radio-button label="TEST1"></el-radio-button>
         <el-radio-button label="TEST2"></el-radio-button>
@@ -71,7 +71,6 @@ export default {
         console.log(this.textInput)
         this.textInput = ''
       }
-
     }
   }
 }
@@ -90,7 +89,6 @@ export default {
 .main-body {
   display: flex;
   flex-direction: column;
-  //row-gap: 20px;
   align-items: center;
   margin-top: 20px;
   .chat-container {
