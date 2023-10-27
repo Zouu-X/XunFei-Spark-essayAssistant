@@ -7,6 +7,16 @@
     </div>
     <div class="main-body">
       <div class="chat-container">
+        <div class="chat-messages">
+          <div
+            v-for="(message, index) in messages"
+            :key="index"
+            class="message"
+            :class="{ 'my-message' : message.isMine}"
+          >
+            {{ message.text }}
+          </div>
+        </div>
       </div>
       <el-input
       style="width: 650px; margin-top: 20px;"
@@ -47,6 +57,7 @@ export default {
   name: "index",
   data() {
     return {
+      messages: [],
       showClosingAlert: false,
       textInput: '',
       radio: 'TEST1'
@@ -68,7 +79,10 @@ export default {
           this.showClosingAlert = false
         }, 2000)
       }else {
-        console.log(this.textInput)
+        this.messages.push({ text: this.textInput, isMine: true })
+        setTimeout(() => {
+          this.messages.push({ text: "test", isMine: false})
+        }, 1000)
         this.textInput = ''
       }
     }
@@ -77,11 +91,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 .head-bar {
+  //background-color: #223E82;
   height: 70px;
   width: 100%;
   border-bottom: 1px solid #dcdfe6;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   column-gap: 80px;
 
@@ -91,14 +106,42 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-top: 20px;
-  .chat-container {
-    height: 300px;
-    width: 600px;
-    border: 1px solid black;
-  }
   .el-alert {
     width: 400px;
   }
+}
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+  width: 600px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+.message {
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  display: inline-block;
+  max-width: 70%;
+}
+
+.my-message {
+  background-color: #007BFF;
+  color: white;
+  align-self: flex-end;
+}
+
+.chat-input {
+  display: flex;
+  align-items: center;
+  padding: 10px;
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.5s;
