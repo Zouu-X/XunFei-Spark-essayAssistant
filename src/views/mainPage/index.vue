@@ -11,10 +11,17 @@
           <div
             v-for="(message, index) in messages"
             :key="index"
-            class="message"
-            :class="{ 'my-message' : message.isMine}"
+            class="msg-group"
           >
-            {{ message.text }}
+            <div class="msg-head">
+              {{ message.isMine ? 'User' : 'AI' }}
+            </div>
+            <div
+              class="message"
+              :class="{ 'my-message' : message.isMine}"
+            >
+              {{ message.text }}
+            </div>
           </div>
         </div>
       </div>
@@ -96,7 +103,6 @@ export default {
   width: 100%;
   border-bottom: 1px solid #dcdfe6;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   column-gap: 80px;
 
@@ -114,7 +120,7 @@ export default {
   display: flex;
   flex-direction: column;
   height: 300px;
-  width: 600px;
+  width: 80%;
   border: 1px solid #ccc;
   border-radius: 5px;
   overflow: hidden;
@@ -124,18 +130,34 @@ export default {
   overflow-y: auto;
   padding: 10px;
 }
-.message {
-  padding: 5px;
+.msg-group {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.msg-head {
+  text-align: center; /* 文字水平居中 */
+  line-height: 36px; /* 文字垂直居中，与容器高度相等 */
+  width: 36px;
+  height: 36px;
+  padding: 6px;
   margin: 5px;
   border-radius: 5px;
-  display: inline-block;
-  max-width: 70%;
+  background: yellowgreen;
+}
+.message {
+  min-height: 36px;
+  width: 100%;
+  background-color: #CB9836;
+  padding: 6px;
+  margin: 5px;
+  border-radius: 5px;
+  display: flex;
 }
 
 .my-message {
-  background-color: #007BFF;
+  background-color: #223E82;
   color: white;
-  align-self: flex-end;
 }
 
 .chat-input {
