@@ -98,11 +98,11 @@ export default {
         });
       }else {
         this.messages.push({role: "user", content: this.textInput})
-        this.sendMsg(this.textInput)
+        this.sendMsg()
         this.textInput = ''
       }
     },
-    async sendMsg (textInput) {
+    async sendMsg () {
       let myUrl = await getWebsocketUrl();
       let socket = new WebSocket(myUrl);
       let tempMsg = ''
@@ -114,7 +114,7 @@ export default {
           },
           "parameter": {
             "chat": {
-              "domain": "general",
+              "domain": "generalv3",
               "temperature": 0.5,
               "max_tokens": 1024,
             }
