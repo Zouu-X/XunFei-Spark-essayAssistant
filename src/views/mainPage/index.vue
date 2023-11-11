@@ -73,11 +73,13 @@ export default {
   },
 
   methods: {
+
     open() {
       this.$alert("Zoe", "联系方式", {confirmButtonText: '确定'})
     },
+    //面谱选择逻辑
     inputListener() {
-      // console.log(this.radio)
+      console.log(this.radio)
     },
     Submit() {
       if (this.textInput === '') {
@@ -104,6 +106,7 @@ export default {
   border-bottom: 1px solid #dcdfe6;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   column-gap: 80px;
 
 }
