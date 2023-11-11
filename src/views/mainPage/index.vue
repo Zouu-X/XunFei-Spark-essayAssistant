@@ -1,9 +1,24 @@
 <template>
-  <div>
+  <main>
     <div class="head-bar">
-      <el-button type="text" @click="open">Contact Me</el-button>
+      <el-button type="text" @click="dialogVisible = true">Contact Me</el-button>
+      <el-dialog
+          title="Contact Me"
+          :visible.sync="dialogVisible"
+          width="30%"
+          >
+        <div class="contact-items">
+          <span>Zoe</span>
+          <span>2020210120</span>
+          <span>Github:https://github.com/Zouu-X</span>
+        </div>
+        <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
+      </el-dialog>
       <span>Welcome</span>
-      <el-button class="style-change">Model change</el-button>
+      <el-button class="style-change" @click="newChat">New Chat</el-button>
     </div>
     <div class="main-body">
       <div class="chat-container">
@@ -14,13 +29,14 @@
             class="msg-group"
           >
             <div class="msg-head">
-              {{ message.isMine ? 'User' : 'AI' }}
+              <span v-if="message.role === 'user'">user</span>
+              <span v-else-if="message.role === 'assistant'">AI</span>
             </div>
             <div
               class="message"
-              :class="{ 'my-message' : message.isMine}"
+              :class="{ 'my-message' : message.role === 'user'}"
             >
-              {{ message.text }}
+              {{ message.content }}
             </div>
           </div>
         </div>
@@ -35,15 +51,6 @@
         <el-button slot="append" icon="el-icon-thumb" @click="Submit" />
       </el-input>
 
-      <transition name="fade">
-        <el-alert
-          v-if="showClosingAlert"
-          title="无效内容"
-          type="error"
-          effect="light"
-          show-icon
-        />
-      </transition>
       <el-radio-group
           v-model="radio"
           @input="inputListener"
@@ -55,7 +62,7 @@
         <el-radio-button label="TEST4"></el-radio-button>
       </el-radio-group>
     </div>
-  </div>
+  </main>
 
 </template>
 
@@ -66,6 +73,7 @@ export default {
   name: "index",
   data() {
     return {
+      dialogVisible: false,
       messages: [],
       showClosingAlert: false,
       textInput: '',
@@ -84,12 +92,12 @@ export default {
     },
     Submit() {
       if (this.textInput === '') {
-        this.showClosingAlert = true
-        setTimeout(() => {
-          this.showClosingAlert = false
-        }, 2000)
+        this.$message({
+          message: '请输入内容',
+          type: 'warning'
+        });
       }else {
-        this.messages.push({ text: this.textInput, isMine: true })
+        this.messages.push({role: "user", content: this.textInput})
         this.sendMsg(this.textInput)
         this.textInput = ''
       }
@@ -115,12 +123,7 @@ export default {
             "message": {
               // 如果想获取结合上下文的回答，需要开发者每次将历史问答信息一起传给服务端，如下示例
               // 注意：text里面的所有content内容加一起的tokens需要控制在8192以内，开发者如有较长对话需求，需要适当裁剪历史信息
-              "text": [
-                { "role": "user", "content": "你是谁" }, //# 用户的历史问题
-                { "role": "assistant", "content": "我是AI助手" },  //# AI的历史回答结果
-                // ....... 省略的历史对话
-                { "role": "user", "content": textInput },  //# 最新的一条问题，如无需上下文，可只传最新一条问题
-              ]
+              "text": this.messages
             }
           }
         };
@@ -148,14 +151,11 @@ export default {
             }, 1000)
           }
         }
-        // this.messages.push({ text: this.localRequestObj.sparkResult, isMine: false })
-        // console.log('MSGRES', this.messages)
-        // addMsgToTextarea(localRequestObj.sparkResult);
       })
       socket.addEventListener('close', (event) => {
         console.log('连接关闭！！', event);
         console.log('sparkRes', this.localRequestObj.sparkResult)
-        this.messages.push({ text: tempMsg, isMine: false })
+        this.messages.push({role: 'assistant', content: tempMsg})
         // 对话完成后socket会关闭，将聊天记录换行处理
         // this.localRequestObj.sparkResult = this.localRequestObj.sparkResult + "&#10;"
         // addMsgToTextarea(localRequestObj.sparkResult);
@@ -163,6 +163,11 @@ export default {
       socket.addEventListener('error', (event) => {
         console.log('连接发送错误！！', event);
       })
+    },
+    newChat() {
+      this.messages = []
+      this.localRequestObj.sparkResult = ''
+      location.reload();
     }
   }
 }
@@ -170,6 +175,7 @@ export default {
 <style lang="scss" scoped>
 .head-bar {
   //background-color: #223E82;
+  margin: -1px;
   height: 70px;
   width: 100%;
   border-bottom: 1px solid #dcdfe6;
@@ -177,16 +183,18 @@ export default {
   align-items: center;
   justify-content: space-between;
   column-gap: 80px;
-
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 调整阴影参数根据需要 */
 }
 .main-body {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 20px;
-  .el-alert {
-    width: 400px;
-  }
+}
+.contact-items {
+  display: flex;
+  row-gap: 4px;
+  flex-direction: column;
 }
 .chat-container {
   display: flex;
