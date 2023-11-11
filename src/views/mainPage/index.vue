@@ -115,7 +115,7 @@ export default {
           "parameter": {
             "chat": {
               "domain": "generalv3",
-              "temperature": 0.5,
+              "temperature": 0.2,
               "max_tokens": 1024,
             }
           },
