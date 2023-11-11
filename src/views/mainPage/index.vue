@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import {getWebsocketUrl} from "@/views/mainPage/api";
+import {requestObj} from "@/views/mainPage/api";
 export default {
   name: "index",
   data() {
@@ -67,13 +69,12 @@ export default {
       messages: [],
       showClosingAlert: false,
       textInput: '',
-      radio: 'TEST1'
-
+      radio: 'TEST1',
+      localRequestObj: requestObj
     }
   },
 
   methods: {
-
     open() {
       this.$alert("Zoe", "联系方式", {confirmButtonText: '确定'})
     },
@@ -89,11 +90,79 @@ export default {
         }, 2000)
       }else {
         this.messages.push({ text: this.textInput, isMine: true })
-        setTimeout(() => {
-          this.messages.push({ text: "test", isMine: false})
-        }, 1000)
+        this.sendMsg(this.textInput)
         this.textInput = ''
       }
+    },
+    async sendMsg (textInput) {
+      let myUrl = await getWebsocketUrl();
+      let socket = new WebSocket(myUrl);
+      let tempMsg = ''
+      socket.addEventListener('open', (event) => {
+        let params = {
+          "header": {
+            "app_id": this.localRequestObj.APPID,
+            "uid": "Vycery"
+          },
+          "parameter": {
+            "chat": {
+              "domain": "general",
+              "temperature": 0.5,
+              "max_tokens": 1024,
+            }
+          },
+          "payload": {
+            "message": {
+              // 如果想获取结合上下文的回答，需要开发者每次将历史问答信息一起传给服务端，如下示例
+              // 注意：text里面的所有content内容加一起的tokens需要控制在8192以内，开发者如有较长对话需求，需要适当裁剪历史信息
+              "text": [
+                { "role": "user", "content": "你是谁" }, //# 用户的历史问题
+                { "role": "assistant", "content": "我是AI助手" },  //# AI的历史回答结果
+                // ....... 省略的历史对话
+                { "role": "user", "content": textInput },  //# 最新的一条问题，如无需上下文，可只传最新一条问题
+              ]
+            }
+          }
+        };
+        console.log("发送消息");
+        socket.send(JSON.stringify(params))
+      })
+      socket.addEventListener('message', (event) => {
+        let data = JSON.parse(event.data)
+        console.log('收到消息！！',data);
+        this.localRequestObj.sparkResult += data.payload.choices.text[0].content
+
+        tempMsg += data.payload.choices.text[0].content
+        if (data.header.code !== 0) {
+          console.log("出错了", data.header.code, ":", data.header.message);
+          // 出错了"手动关闭连接"
+          socket.close()
+        }
+        if (data.header.code === 0) {
+          // 对话已经完成
+          if (data.payload.choices.text && data.header.status === 2) {
+            // this.localRequestObj.sparkResult += data.payload.choices.text[0].content;
+            setTimeout(() => {
+              // "对话完成，手动关闭连接"
+              socket.close()
+            }, 1000)
+          }
+        }
+        // this.messages.push({ text: this.localRequestObj.sparkResult, isMine: false })
+        // console.log('MSGRES', this.messages)
+        // addMsgToTextarea(localRequestObj.sparkResult);
+      })
+      socket.addEventListener('close', (event) => {
+        console.log('连接关闭！！', event);
+        console.log('sparkRes', this.localRequestObj.sparkResult)
+        this.messages.push({ text: tempMsg, isMine: false })
+        // 对话完成后socket会关闭，将聊天记录换行处理
+        // this.localRequestObj.sparkResult = this.localRequestObj.sparkResult + "&#10;"
+        // addMsgToTextarea(localRequestObj.sparkResult);
+      })
+      socket.addEventListener('error', (event) => {
+        console.log('连接发送错误！！', event);
+      })
     }
   }
 }

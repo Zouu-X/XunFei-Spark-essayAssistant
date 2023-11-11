@@ -1,13 +1,14 @@
 import * as base64 from 'base-64'
 import CryptoJs from 'crypto-js'
 
-let requestObj = {
+export const requestObj = {
   APPID: '074221c8',
   APISecret: 'YTExZGE0YTJkNDc4NTBlOTVjZDZkMjg1',
   APIKey: 'cb152de61bba141c41d10de35605c6cd',
   Uid: "testAPI",
   sparkResult: ''
 }
+
 
 //鉴权Url构建
 export const getWebsocketUrl = () => {
