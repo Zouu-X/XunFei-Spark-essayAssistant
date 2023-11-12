@@ -27,6 +27,7 @@
             v-for="(message, index) in messages"
             :key="index"
             class="msg-group"
+            v-if="!message.invisible"
           >
             <div class="msg-head">
               <span v-if="message.role === 'user'">user</span>
@@ -50,17 +51,20 @@
       >
         <el-button slot="append" icon="el-icon-thumb" @click="Submit" />
       </el-input>
+      <div class="mod-choose">
+        <el-radio-group
+            v-model="radio"
+            @input="inputListener"
+            style="margin-top: 30px;"
+        >
+          <el-radio-button label="全部文书"></el-radio-button>
+          <el-radio-button label="简历"></el-radio-button>
+          <el-radio-button label="动机信"></el-radio-button>
+          <el-radio-button label="推荐信"></el-radio-button>
+        </el-radio-group>
+        <el-button class="mod-button" @click="modConfirm">确认</el-button>
+      </div>
 
-      <el-radio-group
-          v-model="radio"
-          @input="inputListener"
-          style="margin-top: 30px;"
-      >
-        <el-radio-button label="TEST1"></el-radio-button>
-        <el-radio-button label="TEST2"></el-radio-button>
-        <el-radio-button label="TEST3"></el-radio-button>
-        <el-radio-button label="TEST4"></el-radio-button>
-      </el-radio-group>
     </div>
   </main>
 
@@ -77,7 +81,7 @@ export default {
       messages: [],
       showClosingAlert: false,
       textInput: '',
-      radio: 'TEST1',
+      radio: '',
       localRequestObj: requestObj
     }
   },
@@ -101,6 +105,12 @@ export default {
         this.sendMsg()
         this.textInput = ''
       }
+    },
+    modConfirm() {
+      if(this.radio === '全部文书') {
+        this.messages.push({role: "user", content: '早上好，这是一个测试消息', invisible: true})
+      }
+      this.sendMsg()
     },
     async sendMsg () {
       let myUrl = await getWebsocketUrl();
@@ -240,15 +250,14 @@ export default {
   color: white;
 }
 
-.chat-input {
+.mod-choose {
   display: flex;
   align-items: center;
-  padding: 10px;
-}
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
+  justify-content: center;
+  .mod-button {
+    margin-left: 6px;
+    align-self: flex-end;
+    background-color: lightblue;
+  }
 }
 </style>
