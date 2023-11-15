@@ -16,7 +16,7 @@
     <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
   </span>
     </el-dialog>
-    <el-button @click="modelbtn">Welcome</el-button>
+    <span>Welcome</span>
     <el-button class="style-change" @click="newChatEvent">New Chat</el-button>
   </div>
 </template>
@@ -31,7 +31,7 @@ export default {
   methods: {
     newChatEvent() {
       this.$emit('newChatEvent')
-    }
+    },
   }
 }
 </script>

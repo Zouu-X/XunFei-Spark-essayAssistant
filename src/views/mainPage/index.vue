@@ -1,6 +1,5 @@
 <template>
   <main>
-
     <div class="main-body">
       <div class="chat-container">
         <div class="chat-messages">
@@ -68,9 +67,6 @@ export default {
 
     }
   },
-  // mounted() {
-  //   window.document.documentElement.setAttribute("data-theme", 'light')
-  // },
   watch: {
     goNewChat(newVal) {
       if (newVal) {
@@ -79,14 +75,6 @@ export default {
     }
   },
   methods: {
-    modelbtn() {
-      this.dark = !this.dark
-      if(this.dark) {
-        window.document.documentElement.setAttribute("data-theme", 'dark')
-      }else {
-        window.document.documentElement.setAttribute("data-theme", 'light')
-      }
-    },
     open() {
       this.$alert("Zoe", "联系方式", {confirmButtonText: '确定'})
     },
@@ -189,11 +177,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "@/assets/scss/common/common";
-#mainPage {
-  @include background_color("background_color");
-  @include font_color("text-color")
-}
 .main-body {
   display: flex;
   flex-direction: column;

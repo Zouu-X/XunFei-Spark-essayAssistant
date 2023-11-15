@@ -13,6 +13,7 @@ export default {
     mainPage,
     headBar
   },
+
   data() {
     return {
       goNewChat: false,
@@ -21,7 +22,7 @@ export default {
   methods: {
     handleChatEvent() {
       this.goNewChat = !this.goNewChat
-    }
+    },
   }
 }
 </script>
