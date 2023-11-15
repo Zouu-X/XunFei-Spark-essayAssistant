@@ -1,25 +1,6 @@
 <template>
   <main>
-    <div class="head-bar">
-      <el-button type="text" @click="dialogVisible = true">Contact Me</el-button>
-      <el-dialog
-          title="Contact Me"
-          :visible.sync="dialogVisible"
-          width="30%"
-          >
-        <div class="contact-items">
-          <span>Zoe</span>
-          <span>2020210120</span>
-          <span>Github:https://github.com/Zouu-X</span>
-        </div>
-        <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-  </span>
-      </el-dialog>
-      <el-button @click="modelbtn">Welcome</el-button>
-      <el-button class="style-change" @click="newChat">New Chat</el-button>
-    </div>
+
     <div class="main-body">
       <div class="chat-container">
         <div class="chat-messages">
@@ -75,19 +56,27 @@ import {getWebsocketUrl} from "@/views/mainPage/api";
 import {requestObj} from "@/views/mainPage/api";
 export default {
   name: "index",
+  props: ['goNewChat'],
   data() {
     return {
       dark: false,
-      dialogVisible: false,
       messages: [],
       showClosingAlert: false,
       textInput: '',
       radio: '',
-      localRequestObj: requestObj
+      localRequestObj: requestObj,
+
     }
   },
-  mounted() {
-    window.document.documentElement.setAttribute("data-theme", 'light')
+  // mounted() {
+  //   window.document.documentElement.setAttribute("data-theme", 'light')
+  // },
+  watch: {
+    goNewChat(newVal) {
+      if (newVal) {
+        this.newChat()
+      }
+    }
   },
   methods: {
     modelbtn() {
@@ -205,29 +194,13 @@ export default {
   @include background_color("background_color");
   @include font_color("text-color")
 }
-.head-bar {
-  //background-color: #223E82;
-  margin: -1px;
-  height: 70px;
-  width: 100%;
-  border-bottom: 1px solid #dcdfe6;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  column-gap: 80px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 调整阴影参数根据需要 */
-}
 .main-body {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 20px;
 }
-.contact-items {
-  display: flex;
-  row-gap: 4px;
-  flex-direction: column;
-}
+
 .chat-container {
   display: flex;
   flex-direction: column;
