@@ -109,6 +109,12 @@ export default {
     modConfirm() {
       if(this.radio === '全部文书') {
         this.messages.push({role: "user", content: '早上好，这是一个测试消息', invisible: true})
+      }else if(this.radio === '简历') {
+        this.messages.push({role: "user", content: '早上好，这是一个测试消息', invisible: true})
+      }else if(this.radio === '动机信') {
+        this.messages.push({role: "user", content: '早上好，这是一个测试消息', invisible: true})
+      }else if(this.radio === '推荐信') {
+        this.messages.push({role: "user", content: '早上好，这是一个测试消息', invisible: true})
       }
       this.sendMsg()
     },
