@@ -17,7 +17,7 @@
     <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
   </span>
       </el-dialog>
-      <span>Welcome</span>
+      <el-button @click="modelbtn">Welcome</el-button>
       <el-button class="style-change" @click="newChat">New Chat</el-button>
     </div>
     <div class="main-body">
@@ -77,6 +77,7 @@ export default {
   name: "index",
   data() {
     return {
+      dark: false,
       dialogVisible: false,
       messages: [],
       showClosingAlert: false,
@@ -85,8 +86,18 @@ export default {
       localRequestObj: requestObj
     }
   },
-
+  mounted() {
+    window.document.documentElement.setAttribute("data-theme", 'light')
+  },
   methods: {
+    modelbtn() {
+      this.dark = !this.dark
+      if(this.dark) {
+        window.document.documentElement.setAttribute("data-theme", 'dark')
+      }else {
+        window.document.documentElement.setAttribute("data-theme", 'light')
+      }
+    },
     open() {
       this.$alert("Zoe", "联系方式", {confirmButtonText: '确定'})
     },
@@ -189,6 +200,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import "@/assets/scss/common/common";
+#mainPage {
+  @include background_color("background_color");
+  @include font_color("text-color")
+}
 .head-bar {
   //background-color: #223E82;
   margin: -1px;
