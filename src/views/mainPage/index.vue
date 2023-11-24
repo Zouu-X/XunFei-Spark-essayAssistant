@@ -96,13 +96,13 @@ export default {
     },
     modConfirm() {
       if(this.radio === '全部文书') {
-        this.messages.push({role: "user", content: '早上好，这是一个测试消息', invisible: true})
+        this.messages.push({role: "user", content: '我正在申请国外大学的硕士，我现在需要你成为一名专业的文书老师，教导我关于文书撰写的知识。请先向我了解具体要写什么文书，是简历、动机信还是推荐信或者其他的', invisible: true})
       }else if(this.radio === '简历') {
-        this.messages.push({role: "user", content: '早上好，这是一个测试消息', invisible: true})
+        this.messages.push({role: "user", content: '我正在做国外大学的硕士申请，我现在需要你成为一名专业的CV老师，教我写CV，首先告诉我CV要包含哪些内容，然后告诉我一步一步该怎么做', invisible: true})
       }else if(this.radio === '动机信') {
-        this.messages.push({role: "user", content: '早上好，这是一个测试消息', invisible: true})
+        this.messages.push({role: "user", content: '我正在做国外大学的硕士申请，我现在需要你成为一名专业的动机信老师，教我写动机信', invisible: true})
       }else if(this.radio === '推荐信') {
-        this.messages.push({role: "user", content: '早上好，这是一个测试消息', invisible: true})
+        this.messages.push({role: "user", content: '我正在做国外大学的硕士申请，我现在需要你成为一名专业的推荐信老师，一步一步教我拟一封来自导师的推荐信', invisible: true})
       }
       this.sendMsg()
     },
