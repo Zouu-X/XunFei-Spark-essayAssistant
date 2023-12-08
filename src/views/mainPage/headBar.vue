@@ -16,7 +16,7 @@
     <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
   </span>
     </el-dialog>
-    <span>Welcome</span>
+    <span>留学文书小助手</span>
     <el-button class="style-change" @click="newChatEvent">New Chat</el-button>
   </div>
 </template>
